@@ -1,2 +1,3 @@
-/resources/.discord_webhook.txt
-/resources/.nasaAPI.txt
+/.discord_webhook.txt
+/nasa/.nasaAPI.txt
+/weather/.openweather_apikey.txt
