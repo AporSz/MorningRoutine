@@ -1,3 +1,4 @@
 /.discord_webhook.txt
 /nasa/.nasaAPI.txt
 /weather/.openweather_apikey.txt
+/weather/.default_location.txt

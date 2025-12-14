@@ -10,7 +10,7 @@ def allowed_gai_family():
 urllib3_cn.allowed_gai_family = allowed_gai_family
 
 def send_all():
-    apod_send()
+    #apod_send()
     weather_send()
 
 def main():
