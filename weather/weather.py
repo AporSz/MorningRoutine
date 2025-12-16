@@ -4,6 +4,7 @@ import requests
 from datetime import datetime
 import sys
 
+from weather.generate_hourly import generate_hourly
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
@@ -64,6 +65,7 @@ def weather_get():
     c_windspeed = data.get("current", None).get("wind_speed", None)
     c_weather = data.get("current", None).get("weather", None)[0].get("main", None)
     c_weather_desc = data.get("current", None).get("weather", None)[0].get("description", None)
+    alerts = data.get("alerts", None)
 
     minutely = data.get("minutely", None)
     will_it_rain = False
@@ -76,6 +78,10 @@ def weather_get():
 
     prediction_text = ""
     prediction_text += f"### {c_weather_desc}, {c_temperature} degrees Celsius, which feel like {c_feelslike} \n"
+
+    if alerts is not None:
+        prediction_text += f"### {alerts[0].get("event")}\n"
+        prediction_text += f"{alerts[0].get("description")}\n"
 
     if will_it_rain:
         if rain_start == 0:
@@ -92,6 +98,11 @@ def weather_get():
     prediction_text += f"Cloudiness:  {c_clouds}%\n"
     prediction_text += f"Visibility: {c_visibility} meters\n"
     prediction_text += f"UV index {c_uvindex}\n"
+    prediction_text += f"Sunrise at {datetime.fromtimestamp(sunrise).time()} and sunset at {datetime.fromtimestamp(sunset).time()}\n"
+    prediction_text += "\n\n"
+
+    hourly = data.get("hourly", None)[:24]
+    prediction_text += generate_hourly(hourly)
 
     weather_send(f"Weather forecast for {time}", prediction_text)
 
@@ -108,7 +119,7 @@ def weather_send(title, description):
             {
                 "title": title,
                 "description": description,
-                "color": 0x0B3D91
+                "color": 0xADD8E6
             }
         ]
     }
