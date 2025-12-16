@@ -4,7 +4,7 @@ import requests
 from datetime import datetime
 import sys
 
-from weather.generate_hourly import generate_hourly
+from generate_hourly import generate_hourly
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
@@ -36,7 +36,7 @@ def get_secret(path):
         return None
 
 
-def weather_get():
+def weather_get_and_send():
     API_KEY = get_secret(API_PATH)
     if API_KEY is None:
         print("Error getting API key")
@@ -104,9 +104,9 @@ def weather_get():
     hourly = data.get("hourly", None)[:24]
     prediction_text += generate_hourly(hourly)
 
-    weather_send(f"Weather forecast for {time}", prediction_text)
+    send_to_discord(f"Weather forecast for {time}", prediction_text)
 
-def weather_send(title, description):
+def send_to_discord(title, description):
     WEEBHOOK_URL = get_secret(DISCORD_WEBHOOK_URL_PATH)
 
     if not WEEBHOOK_URL:
@@ -131,5 +131,7 @@ def weather_send(title, description):
     except requests.exceptions.RequestException as e:
         print(f"Failed to send to Discord: {e}")
 
+def weather_send():
+    weather_get_and_send()
 
-weather_get()
+weather_get_and_send()
