@@ -170,4 +170,4 @@ def send_to_discord(title, description):
 def weather_send():
     weather_get_and_send()
 
-weather_get_and_send()
+##weather_get_and_send()
