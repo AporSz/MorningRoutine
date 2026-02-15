@@ -13,8 +13,5 @@ def send_all():
     apod_send()
     weather_send()
 
-def main():
-    send_all()
-
 if __name__ == '__main__':
-    main()
+    send_all()
